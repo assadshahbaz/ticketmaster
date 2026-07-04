@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  backend:
+  api:
     build:
-      context: ./backend
+      context: ./api
     ports:
       - "3000:3000"
     environment:
@@ -14,32 +14,23 @@ services:
       - ELASTIC_PASSWORD=elastic
       - ELASTIC_CA_PATH=/usr/config/certs/http_ca.crt
     volumes:
-      - ./backend:/usr/src
-      - ./backend/config/certs/http_ca.crt:/usr/config/certs/http_ca.crt
-    depends_on:
-      - mongo
-      - elasticsearch
+      - ./api:/usr/src
+      - ./api/config/certs/http_ca.crt:/usr/config/certs/http_ca.crt
+    networks:
+      - ticketmaster_net
 
-  mongo:
-    image: mongo:6
-    container_name: mongo
+  web:
+    build:
+      context: ./web
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
+      - "4000:4000"
     environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=true
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=elastic
-    ports:
-      - "9200:9200"
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
+      - PORT=4000
+    depends_on:
+      - api
+    networks:
+      - ticketmaster_net
 
-volumes:
-  mongo_data:
-  es_data:
+networks:
+  ticketmaster_net:
+    external: true

@@ -1,8 +1,7 @@
-const fs = require('fs');
-const { Client } = require('@elastic/elasticsearch');
+import fs from 'fs';
+import { Client } from '@elastic/elasticsearch';
 
 // Initialize Elasticsearch client
-// const esClient = new Client({ node: process.env.ELASTICSEARCH_URL });
 const esClient = new Client({
     node: process.env.ELASTICSEARCH_URL || 'https://localhost:9200',
     auth: {
@@ -17,14 +16,11 @@ const esClient = new Client({
 
 // Elasticsearch service methods
 const elasticService = {
-    async indexDocument(index, id, body) {
-        try {
-            return await esClient.index({ index, id, body });
-        } catch (err) {
-            throw err;
-        }
+    async indexDocument(index: string, id: string, body: Record<string, unknown>) {
+        return esClient.index({ index, id, body });
     },
-    async searchDocuments(index, query, from = 0, size = 20) {
+
+    async searchDocuments(index: string, query: Record<string, unknown>, from = 0, size = 20) {
         try {
             const { hits } = await esClient.search({
                 index,
@@ -39,21 +35,13 @@ const elasticService = {
         }
     },
 
-    async updateDocument(index, id, body) {
-        try {
-            return await esClient.update({ index, id, body });
-        } catch (err) {
-            throw err;
-        }
+    async updateDocument(index: string, id: string, body: Record<string, unknown>) {
+        return esClient.update({ index, id, body });
     },
 
-    async deleteDocument(index, id) {
-        try {
-            return await esClient.delete({ index, id });
-        } catch (err) {
-            throw err;
-        }
+    async deleteDocument(index: string, id: string) {
+        return esClient.delete({ index, id });
     },
 };
 
-module.exports = elasticService;
+export default elasticService;

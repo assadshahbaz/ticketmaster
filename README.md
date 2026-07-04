@@ -2,14 +2,14 @@
 
 # **Ticketmaster Application**
 
-This repository contains the **Ticketmaster Application**, a web-based application built using Angular (frontend) and Node.js with MongoDB and Elasticsearch (backend). The application is containerized using Docker for easy deployment. Swagger documentation is integrated to provide detailed API documentation.
+A web-based application built using Angular (frontend) and Node.js with MongoDB and Elasticsearch (backend). I used Docker our best friend to containerized the application for easy deployment. Swagger documentation is integrated to provide detailed API documentation.
 
 ---
 
 ## **Features**
 
 - **Frontend**: Angular 19 (standalone components)
-- **Backend**: Node.js with MongoDB and Elasticsearch
+- **Backend**: Node.js (Express.js)
 - **Database**: MongoDB
 - **Search Engine**: Elasticsearch
 - **API Documentation**: Swagger
@@ -17,14 +17,14 @@ This repository contains the **Ticketmaster Application**, a web-based applicati
 
 ---
 
-## **Directory Structure**
+## **Quick Directory Structure**
 
 ```
 .
-├── backend              # Node.js backend application
+├── api                  # Node.js backend application
 │   ├── src              # Backend source files
 │   └── Dockerfile       # Dockerfile for the backend
-├── ticketmaster         # Angular frontend application
+├── web                  # Angular frontend application
 │   └── Dockerfile       # Dockerfile for the frontend
 ├── docker-compose.yml   # Docker Compose configuration
 └── README.md            # Project documentation
@@ -106,7 +106,7 @@ Place this file in the `backend` directory.
 
 ### **Services Included**
 
-1. **Backend** (`backend`)
+1. **Backend** (`api`)
    - URL: `http://localhost:3000`
    - Swagger: `http://localhost:3000/api-docs`
 
@@ -116,7 +116,7 @@ Place this file in the `backend` directory.
 3. **Elasticsearch** (`elasticsearch`)
    - URL: `http://localhost:9200`
 
-4. **Frontend** (`angular-frontend`)
+4. **Frontend** (`web`)
    - URL: `http://localhost:4000`
 
 ---
@@ -140,7 +140,7 @@ Access the app at `http://localhost:4200`.
 To run the Node.js backend locally:
 
 ```bash
-cd backend
+cd api
 npm install
 npm start
 ```

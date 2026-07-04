@@ -1,20 +1,19 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const ticketRoutes = require('./routes/tickets');
-const connectToMongoDB = require('./db/mongo');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocs = require('./swagger');
+import dotenv from 'dotenv';
+dotenv.config();
 
-require('dotenv').config();
-
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import swaggerUi from 'swagger-ui-express';
+import ticketRoutes from './routes/tickets';
+import connectToMongoDB from './db/mongo';
+import swaggerDocs from './swagger';
 
 // Initialize Express app
 const app = express();
 
 // Allow cors origin
 app.use(cors({ origin: true }));
-
 
 // Middleware
 app.use(bodyParser.json());

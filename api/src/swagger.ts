@@ -1,6 +1,6 @@
-const swaggerJsDoc = require('swagger-jsdoc');
+import swaggerJsDoc from 'swagger-jsdoc';
 
-const swaggerOptions = {
+const swaggerOptions: swaggerJsDoc.Options = {
     definition: {
         openapi: '3.0.0',
         info: {
@@ -14,9 +14,9 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./src/routes/*.js'], // Path to the route files
+    apis: ['./src/routes/*.ts'], // Path to the route files
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-module.exports = swaggerDocs;
+export default swaggerDocs;
