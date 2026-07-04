@@ -1,7 +1,9 @@
-import express, { Router } from 'express';
-import TicketController from '../controllers/tickets';
+import createAsyncRouter from '../../utils/asyncRouter';
+import TicketController from '../controllers/ticket';
+import validate from '../../middleware/validate';
+import { createTicketSchema, updateTicketSchema } from '../../validators/ticket.validator';
 
-const router: Router = express.Router();
+const router = createAsyncRouter();
 
 /**
  * @swagger
@@ -104,7 +106,7 @@ const router: Router = express.Router();
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.post('/', TicketController.create);
+router.post('/', validate(createTicketSchema), TicketController.create);
 
 /**
  * @swagger
@@ -191,7 +193,7 @@ router.get('/:id', TicketController.fetchOne);
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.put('/:id', TicketController.update);
+router.put('/:id', validate(updateTicketSchema), TicketController.update);
 
 /**
  * @swagger
