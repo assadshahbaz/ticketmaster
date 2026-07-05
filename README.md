@@ -31,11 +31,6 @@ Think of it less as a demo app and more as a portfolio of practices.
 
 ---
 
-## Screenshots
-
-
----
-
 ## Project structure
 
 ```
@@ -144,3 +139,20 @@ Swagger is generated from JSDoc comments on the route definitions themselves (`a
 | `web/` | `npm start` | `ng serve`, dev server on :4200 |
 | `web/` | `npm run build` | Production SSR build |
 | `web/` | `npm run serve:ssr:ticketmaster` | Runs the built SSR server |
+
+## Screenshots
+
+**Listing**
+<img width="1920" height="826" alt="image" src="https://github.com/user-attachments/assets/c64c7fd5-be01-4601-823a-c1f8f6d0ae46" />
+
+**Create**
+<img width="1920" height="826" alt="image" src="https://github.com/user-attachments/assets/2f410dc8-2f7e-4b35-91fa-035ba340326c" />
+
+**Update**
+<img width="1920" height="826" alt="image" src="https://github.com/user-attachments/assets/1ad7cab8-6756-4590-b772-d62ed4078c55" />
+
+**Confirmation Dialog**
+<img width="1920" height="826" alt="screencapture-localhost-4200-tickets-2026-07-05-16_21_45" src="https://github.com/user-attachments/assets/4254ad2d-8241-4fd0-877e-418e8f78bf36" />
+
+
+---
