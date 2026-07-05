@@ -1,4 +1,3 @@
-
 export interface CreateTicket {
   name: string;
 }

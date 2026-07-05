@@ -42,5 +42,4 @@ ticketSchema.post('findOneAndDelete', async function (doc: ITicket | null) {
   await elasticService.deleteDocument(ES_INDEX, doc._id.toString());
 });
 
-// Bound to the default mongoose connection; ready to use as soon as it's imported
 export default model<ITicket>('ticket', ticketSchema);

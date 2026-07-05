@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TicketService } from '../../services/ticket.service';
 
-
 @Component({
   selector: 'app-ticket-add-edit',
   imports: [
@@ -24,8 +23,6 @@ export class TicketAddEditComponent implements OnInit {
 
   protected ticketService = inject(TicketService);
 
-  // Captured here (a valid injection context) so it can be passed explicitly to
-  // takeUntilDestroyed(this.destroyRef) from regular methods, which are not injection contexts.
   private destroyRef = inject(DestroyRef);
 
   constructor(

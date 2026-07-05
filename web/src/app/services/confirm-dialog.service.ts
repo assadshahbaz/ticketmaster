@@ -19,9 +19,6 @@ const DEFAULT_STATE: ConfirmDialogState = {
   cancelButtonText: 'Cancel',
 };
 
-// Drives the globally-mounted <app-confirm-dialog/> (see app.component.html).
-// Components depend on "show a confirmation dialog", not on any particular
-// dialog library/implementation.
 @Injectable({ providedIn: 'root' })
 export class ConfirmDialogService {
 
