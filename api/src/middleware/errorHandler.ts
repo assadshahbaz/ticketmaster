@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import ApiError from '../utils/ApiError';
+import logger from '../config/logger';
 
 /**
  * Handling errors gracefully
@@ -11,7 +12,11 @@ const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunct
 		return;
 	}
 
-	console.error(err);
+	logger.error({ err, method: req.method, path: req.path }, 'Unhandled error');
+
+	// pino-http falls back to a generic "failed with status code X" message on its
+	// own request-completed log unless res.err is set — give it the real cause.
+	res.err = err instanceof Error ? err : new Error(String(err));
 	res.status(500).json({ error: 'Internal server error' });
 };
 

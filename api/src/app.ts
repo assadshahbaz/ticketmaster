@@ -10,12 +10,17 @@ import connectToMongoDB from './db/mongo';
 import swaggerDocs from './swagger';
 import errorHandler from './middleware/errorHandler';
 import { corsOptions } from './config/cors';
+import logger from './config/logger';
+import requestLogger from './config/requestLogger';
 
 // Initialize Express app
 const app = express();
 
 // Security headers
 app.use(helmet());
+
+// Request logging
+app.use(requestLogger);
 
 // Allow cors origin
 app.use(cors(corsOptions));
@@ -37,5 +42,5 @@ app.use(errorHandler);
 
 // Start server
 app.listen(env.PORT, () => {
-	console.log(`Server is running on http://localhost:${env.PORT}`);
+	logger.info(`Server is running on ${env.API_URL}`);
 });

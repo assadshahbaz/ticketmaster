@@ -1,4 +1,5 @@
 import swaggerJsDoc from 'swagger-jsdoc';
+import { env } from './config/env';
 
 const swaggerOptions: swaggerJsDoc.Options = {
   definition: {
@@ -9,9 +10,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
       description: 'API documentation for the Ticketmaster app',
     },
     servers: [
-      {
-        url: 'http://localhost:3000', // Update with your server URL
-      },
+      { url: env.API_URL },
     ],
   },
   apis: ['./src/app/routes/*.ts'], // Path to the route files
