@@ -1,13 +1,11 @@
 <div class="container mx-auto px-8 py-8">
 
-    <div class="flex items-center justify-between mb-8">
-        <a [routerLink]="['/tickets']" class="text-lg font-semibold">Ticketmaster</a>
-        <a class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600"
-            [routerLink]="['/tickets/create']">
-            Create new ticket
-        </a>
-    </div>
+  <div class="flex items-center justify-between mb-8">
+    <a [routerLink]="['/']" class="text-lg font-semibold">Ticketmaster</a>
+  </div>
 
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 
 </div>
+
+<app-confirm-dialog></app-confirm-dialog>

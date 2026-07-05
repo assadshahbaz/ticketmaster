@@ -1,0 +1,15 @@
+<div *ngIf="dialogService.state().visible" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+  <div class="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+    <h2 class="text-lg font-semibold text-gray-900">{{ dialogService.state().title }}</h2>
+    <p class="mt-2 text-sm text-gray-600">{{ dialogService.state().text }}</p>
+
+    <div class="mt-6 flex justify-end gap-3">
+      <button (click)="cancel()" class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">
+        {{ dialogService.state().cancelButtonText }}
+      </button>
+      <button (click)="confirm()" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+        {{ dialogService.state().confirmButtonText }}
+      </button>
+    </div>
+  </div>
+</div>

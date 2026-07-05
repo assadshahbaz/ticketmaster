@@ -8,6 +8,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { provideToastr } from 'ngx-toastr';
 import { HttpAPIInterceptor } from './utils/http-interceptor';
+import { API_URL } from './tokens/api-url.token';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +22,6 @@ export const appConfig: ApplicationConfig = {
     ),
     provideToastr(),
     provideAnimations(),
+    { provide: API_URL, useValue: environment.apiUrl },
   ]
 };

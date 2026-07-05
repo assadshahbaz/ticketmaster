@@ -1,37 +1,42 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateTicket, ITickets, Ticket } from '../model/ticket.model';
+import { API_URL } from '../tokens/api-url.token';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
 
-    private apiUrl = 'http://localhost:3000/api/tickets';
+  private ticketsUrl: string;
 
-    constructor(private http: HttpClient) { }
+  private apiUrl: string = inject(API_URL);
 
-    getTickets(page: number, size: number, searchTerm?: string): Observable<ITickets> {
-        let params: any = { page: page.toString(), size: size.toString() };
-        if (searchTerm && searchTerm.length >= 3) {
-            params = { ...params, search: searchTerm };
-        }
-        return this.http.get<ITickets>(this.apiUrl, { params });
+  constructor(private http: HttpClient) {
+    this.ticketsUrl = `${this.apiUrl}/tickets`;
+  }
+
+  fetch(page: number, size: number, searchTerm?: string): Observable<ITickets> {
+    let params: any = { page: page.toString(), size: size.toString() };
+    if (searchTerm && searchTerm.length >= 3) {
+      params = { ...params, search: searchTerm };
     }
+    return this.http.get<ITickets>(this.ticketsUrl, { params });
+  }
 
-    getTicketById(id: string): Observable<Ticket> {
-        return this.http.get<Ticket>(`${this.apiUrl}/${id}`);
-    }
+  fetchById(id: string): Observable<Ticket> {
+    return this.http.get<Ticket>(`${this.ticketsUrl}/${id}`);
+  }
 
-    createTicket(ticket: CreateTicket): Observable<Ticket> {
-        return this.http.post<Ticket>(this.apiUrl, ticket);
-    }
+  create(ticket: CreateTicket): Observable<Ticket> {
+    return this.http.post<Ticket>(this.ticketsUrl, ticket);
+  }
 
-    updateTicket(id: string, ticket: CreateTicket): Observable<Ticket> {
-        return this.http.put<Ticket>(`${this.apiUrl}/${id}`, ticket);
-    }
+  update(id: string, ticket: CreateTicket): Observable<Ticket> {
+    return this.http.put<Ticket>(`${this.ticketsUrl}/${id}`, ticket);
+  }
 
-    deleteTicket(id: string): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${id}`);
-    }
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.ticketsUrl}/${id}`);
+  }
 
 }

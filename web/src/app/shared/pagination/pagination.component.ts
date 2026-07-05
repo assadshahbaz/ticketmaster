@@ -5,7 +5,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
   selector: 'app-pagination',
   imports: [CommonModule],
   templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent implements OnInit {

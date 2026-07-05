@@ -1,0 +1,16 @@
+<div class="w-2/3 m-auto">
+  <h2 class="mb-4 text-2xl font-semibold">{{ ticketId ? 'Edit Ticket #' + sortingId : 'Create a Ticket' }}</h2>
+  <form class="space-y-4" (ngSubmit)="onSubmit()">
+    <div>
+      <label class="block text-gray-700 font-medium">Name</label>
+      <input type="text" id="name" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" required
+        class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+    <div class="flex justify-end">
+      <button type="submit" [disabled]="!name"
+        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
+        {{ ticketId ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>
