@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: api
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+        env:
+          NODE_ENV: test
+          PORT: '3000'
+          API_URL: http://localhost:3000
+          LOG_LEVEL: silent
+          MONGO_URI: mongodb://localhost:27017/test
+          CORS_ORIGIN: http://localhost:4200
+          ELASTICSEARCH_URL: https://localhost:9200
+          ELASTIC_USERNAME: elastic
+          ELASTIC_PASSWORD: changeme
+          ELASTIC_CA_PATH: config/certs/http_ca.crt
+
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test -- --watch=false --browsers=ChromeHeadless
