@@ -13,8 +13,6 @@ export class PaginationComponent implements OnInit {
   @Input() totalPages = 1;
   @Output() pageChange = new EventEmitter<number>();
 
-  constructor() { }
-
   ngOnInit(): void {
   }
 

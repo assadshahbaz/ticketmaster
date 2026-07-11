@@ -31,10 +31,9 @@ export class TicketsListingComponent implements OnInit {
 
   private destroyRef = inject(DestroyRef);
 
-  constructor(
-    private _toastrService: ToastrService,
-    private confirmDialogService: ConfirmDialogService,
-  ) { }
+  private _toastrService = inject(ToastrService);
+
+  private confirmDialogService = inject(ConfirmDialogService);
 
   ngOnInit() {
     this.loadTickets();

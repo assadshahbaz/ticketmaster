@@ -12,6 +12,4 @@ import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.c
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'ticketmaster';
-}
+export class AppComponent {}
