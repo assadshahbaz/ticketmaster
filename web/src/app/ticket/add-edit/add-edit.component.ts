@@ -23,12 +23,11 @@ export class TicketAddEditComponent implements OnInit {
 
   protected ticketService = inject(TicketService);
 
-  private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-  ) { }
+  private router = inject(Router);
+
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.ticketId = this.route.snapshot.params['id'];

@@ -12,8 +12,6 @@ export class ConfirmDialogComponent {
 
   public dialogService = inject(ConfirmDialogService)
 
-  constructor() { }
-
   confirm() {
     this.dialogService.respond(true);
   }

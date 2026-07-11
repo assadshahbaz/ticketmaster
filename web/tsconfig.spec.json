@@ -5,11 +5,15 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jasmine"
+      "mocha",
+      "chai",
+      "sinon",
+      "sinon-chai"
     ]
   },
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/test-setup.ts"
   ]
 }
