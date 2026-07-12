@@ -27,9 +27,6 @@ interface IEnv {
     MONGO_URI: string;
     CORS_ORIGIN: string;
     ELASTICSEARCH_URL: string;
-    ELASTIC_USERNAME: string;
-    ELASTIC_PASSWORD: string;
-    ELASTIC_CA_PATH: string;
 }
 
 const envSchema = z.object({
@@ -40,9 +37,6 @@ const envSchema = z.object({
     MONGO_URI: z.string().min(1, 'MONGO_URI is required'),
     CORS_ORIGIN: z.string().min(1, 'CORS_ORIGIN is required'),
     ELASTICSEARCH_URL: z.string().min(1, 'ELASTICSEARCH_URL is required'),
-    ELASTIC_USERNAME: z.string().min(1, 'ELASTIC_USERNAME is required'),
-    ELASTIC_PASSWORD: z.string().min(1, 'ELASTIC_PASSWORD is required'),
-    ELASTIC_CA_PATH: z.string().min(1, 'ELASTIC_CA_PATH is required'),
 });
 
 const result = envSchema.safeParse(process.env);

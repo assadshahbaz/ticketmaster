@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Ticket from '../models/ticket';
-import elasticService from '../../services/elasticsearch';
 import ApiError from '../../utils/ApiError';
 import getPagination from '../../utils/pagination';
 
@@ -23,7 +22,7 @@ export default class TicketController {
     const { page, limit } = getPagination(req);
 
     if (search && search.length >= 3) {
-      const results = await elasticService.searchTickets(search);
+      const results = await Ticket.search(search);
 
       res.json({
         tickets: results,

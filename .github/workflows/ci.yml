@@ -41,10 +41,7 @@ jobs:
           LOG_LEVEL: silent
           MONGO_URI: mongodb://localhost:27017/test
           CORS_ORIGIN: http://localhost:4200
-          ELASTICSEARCH_URL: https://localhost:9200
-          ELASTIC_USERNAME: elastic
-          ELASTIC_PASSWORD: changeme
-          ELASTIC_CA_PATH: config/certs/http_ca.crt
+          ELASTICSEARCH_URL: http://localhost:9200
 
   web:
     name: web
