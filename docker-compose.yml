@@ -14,12 +14,8 @@ services:
       - CORS_ORIGIN=http://localhost:4200,http://localhost:4000
       - MONGO_URI=mongodb://mongo:27017/ticketdb
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=elastic
-      - ELASTIC_CA_PATH=/usr/config/certs/http_ca.crt
     volumes:
       - ./api:/usr/src
-      - ./api/config/certs/http_ca.crt:/usr/config/certs/http_ca.crt
     networks:
       - ticketmaster_net
 

@@ -23,7 +23,7 @@ Think of it less as a demo app and more as a portfolio of practices.
 - **A properly layered backend.** Routes only wire paths to controllers, controllers only orchestrate, and models own their own persistence side effects. Cross-cutting concerns like validation, logging, and configuration each live in their own folder instead of being scattered through business logic.
 - **Errors handled in one place.** Every route is wrapped so a thrown or rejected error always lands in a single error handler, with a typed `ApiError` carrying the right status code. No repeated try/catch blocks anywhere in the codebase.
 - **Validation and configuration both schema-driven.** Zod checks incoming request bodies and the app's own environment variables at startup, so bad input and missing config both fail fast with a clear message instead of a confusing crash somewhere downstream.
-- **Search that never drifts from the source of truth.** Mongoose lifecycle hooks index, update, and remove documents in Elasticsearch automatically whenever a ticket is written, no matter which part of the app made the change.
+- **Search that never drifts from the source of truth.** A reusable mongoose plugin (`plugins/esIndexPlugin`) mirrors writes into Elasticsearch and adds a `search()` static, so any model gets automatic indexing and full-text search by attaching the plugin — no per-model glue code required.
 - **Real logging, not console output.** Structured, leveled logs with request tracing, and third-party client errors summarized into something readable instead of dumping raw internals.
 - **Security considered by default.** Standard security headers, an explicit CORS allowlist, and no secrets or personal file paths hardcoded in source.
 - **A frontend that knows where it's running.** The same Angular app resolves the API's address differently depending on whether it's rendering in the browser or on the server inside a container, so server side rendering works correctly in both environments without extra setup.
@@ -40,6 +40,7 @@ Think of it less as a demo app and more as a portfolio of practices.
 │       ├── app/                # routes → controllers → models (per resource)
 │       ├── config/              # env, cors, logger, pagination, validated at boot
 │       ├── middleware/          # asyncHandler, errorHandler, validate
+│       ├── plugins/             # esIndexPlugin — attach a model to Elasticsearch
 │       ├── services/            # elasticsearch client
 │       ├── utils/                # ApiError, asyncRouter, pagination helper
 │       └── validators/          # Zod schemas
@@ -115,7 +116,7 @@ Validated at startup via Zod (`config/env.ts`). If any of these are missing or m
 | `LOG_LEVEL` | Pino log level (`info`, `debug`, ...) |
 | `MONGO_URI` | MongoDB connection string |
 | `CORS_ORIGIN` | Comma-separated allowlist, e.g. `http://localhost:4200,http://localhost:4000` |
-| `ELASTICSEARCH_URL`, `ELASTIC_USERNAME`, `ELASTIC_PASSWORD`, `ELASTIC_CA_PATH` | Elasticsearch connection |
+| `ELASTICSEARCH_URL` | Elasticsearch connection |
 
 The dockerized `api` service sets its own equivalents through `docker-compose.yml`'s `environment:` block, using Docker network hostnames instead of `localhost`, so it doesn't rely on `.env` at all when run that way.
 

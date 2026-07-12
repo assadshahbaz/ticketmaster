@@ -3,7 +3,6 @@ import sinon from 'sinon';
 import { Request, Response } from 'express';
 import TicketController from '../../../src/app/controllers/ticket';
 import Ticket from '../../../src/app/models/ticket';
-import elasticService from '../../../src/services/elasticsearch';
 import ApiError from '../../../src/utils/ApiError';
 
 const makeRes = (): Response => {
@@ -44,7 +43,7 @@ describe('TicketController', () => {
       };
       sinon.stub(Ticket, 'find').returns(findStub as any);
       sinon.stub(Ticket, 'countDocuments').resolves(2);
-      const searchStub = sinon.stub(elasticService, 'searchTickets');
+      const searchStub = sinon.stub(Ticket, 'search');
 
       const req = { query: {} } as unknown as Request;
       const res = makeRes();
@@ -57,7 +56,7 @@ describe('TicketController', () => {
 
     it('delegates to Elasticsearch when a search term of 3+ chars is given', async () => {
       const results = [{ name: 'matched' }];
-      const searchStub = sinon.stub(elasticService, 'searchTickets').resolves(results as any);
+      const searchStub = sinon.stub(Ticket, 'search').resolves(results as any);
       const findStub = sinon.stub(Ticket, 'find');
 
       const req = { query: { search: 'abc' } } as unknown as Request;
@@ -78,7 +77,7 @@ describe('TicketController', () => {
       };
       sinon.stub(Ticket, 'find').returns(findStub as any);
       sinon.stub(Ticket, 'countDocuments').resolves(0);
-      const searchStub = sinon.stub(elasticService, 'searchTickets');
+      const searchStub = sinon.stub(Ticket, 'search');
 
       const req = { query: { search: 'ab' } } as unknown as Request;
       const res = makeRes();
