@@ -1,3 +1,11 @@
 web/.vscode
+web/.angular
+web/dist
+web/node_modules
 api/node_modules
 api/dist
+api/.env
+
+# System files
+.DS_Store
+Thumbs.db
