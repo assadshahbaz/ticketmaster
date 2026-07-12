@@ -28,9 +28,9 @@ const isIndexAlreadyExists = (err: unknown): boolean =>
 const elasticService = {
   async ensureIndex(index: string, mappings?: Record<string, unknown>): Promise<void> {
     try {
-      const exists = await esClient.indices.exists({ index });
+      const { body: exists } = await esClient.indices.exists({ index });
       if (!exists) {
-        await esClient.indices.create({ index, ...(mappings ? { mappings } : {}) });
+        await esClient.indices.create({ index, body: mappings ? { mappings } : undefined });
         logger.info({ index }, 'Created Elasticsearch index');
       }
     } catch (err) {
@@ -45,7 +45,7 @@ const elasticService = {
 
   async index(index: string, id: string, document: Record<string, unknown>) {
     try {
-      return await esClient.index({ index, id, document });
+      return await esClient.index({ index, id, body: document });
     } catch (err) {
       throw logAndWrap(err, { index, id }, 'Error indexing document');
     }
@@ -53,7 +53,7 @@ const elasticService = {
 
   async update(index: string, id: string, doc: Record<string, unknown>) {
     try {
-      return await esClient.update({ index, id, doc });
+      return await esClient.update({ index, id, body: { doc } });
     } catch (err) {
       throw logAndWrap(err, { index, id }, 'Error updating document');
     }
@@ -70,8 +70,8 @@ const elasticService = {
 
   async search(index: string, query: Record<string, unknown>, from = 0, size = 20) {
     try {
-      const { hits } = await esClient.search({ index, from, size, query });
-      return hits.hits.map((hit) => hit._source);
+      const { body } = await esClient.search({ index, from, size, body: { query } });
+      return body.hits.hits.map((hit: { _source: unknown }) => hit._source);
     } catch (err) {
       throw logAndWrap(err, { index }, 'Error searching documents');
     }

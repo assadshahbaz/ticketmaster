@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": true,
+    "moduleResolution": "Node10",
     "types": ["node", "mocha", "chai", "sinon", "sinon-chai", "pino-http"]
   },
   "include": [
