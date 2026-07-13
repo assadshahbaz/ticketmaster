@@ -1,59 +1,13 @@
 # Ticketmaster
 
-A small ticket management app: create, search, edit, delete. The CRUD itself is simple on purpose. What this repo is really meant to show is everything sitting around that CRUD: a clean layered backend, validation and error handling done properly, search kept in sync automatically, and a modular Angular SSR frontend that mirrors the same care.
+[![CI](https://github.com/assadshahbaz/ticketmaster/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/assadshahbaz/ticketmaster/actions/workflows/ci.yml)
+
+A small ticket management app: create, search, edit, delete. The CRUD itself is simple on purpose. What this repo is really meant to show is everything sitting around that CRUD: a clean layered backend, validation and error handling done properly, search kept in sync automatically, a modular Angular SSR frontend that mirrors the same care, CI running on every push, and both services built as Docker images and deployed to Render.
 
 Think of it less as a demo app and more as a portfolio of practices.
 
----
-
-## Stack
-
-| Layer      | Tech                                                        |
-|------------|--------------------------------------------------------------|
-| Frontend   | Angular 19 (standalone components, SSR), TailwindCSS, RxJS    |
-| Backend    | Node.js, Express, TypeScript                                  |
-| Data       | MongoDB (Mongoose), Elasticsearch (search)                    |
-| Docs       | Swagger / OpenAPI                                              |
-| Infra      | Docker, Docker Compose                                         |
-
----
-
-## Highlights
-
-- **A properly layered backend.** Routes only wire paths to controllers, controllers only orchestrate, and models own their own persistence side effects. Cross-cutting concerns like validation, logging, and configuration each live in their own folder instead of being scattered through business logic.
-- **Errors handled in one place.** Every route is wrapped so a thrown or rejected error always lands in a single error handler, with a typed `ApiError` carrying the right status code. No repeated try/catch blocks anywhere in the codebase.
-- **Validation and configuration both schema-driven.** Zod checks incoming request bodies and the app's own environment variables at startup, so bad input and missing config both fail fast with a clear message instead of a confusing crash somewhere downstream.
-- **Search that never drifts from the source of truth.** A reusable mongoose plugin (`plugins/esIndexPlugin`) mirrors writes into Elasticsearch and adds a `search()` static, so any model gets automatic indexing and full-text search by attaching the plugin — no per-model glue code required.
-- **Real logging, not console output.** Structured, leveled logs with request tracing, and third-party client errors summarized into something readable instead of dumping raw internals.
-- **Security considered by default.** Standard security headers, an explicit CORS allowlist, and no secrets or personal file paths hardcoded in source.
-- **A frontend that knows where it's running.** The same Angular app resolves the API's address differently depending on whether it's rendering in the browser or on the server inside a container, so server side rendering works correctly in both environments without extra setup.
-- **Routing built to grow.** Each feature owns its own route file and loads on demand. Adding a new module later means adding one file and one line, not touching what already exists.
-
----
-
-## Project structure
-
-```
-.
-├── api/                        # Express + TypeScript backend
-│   └── src/
-│       ├── app/                # routes → controllers → models (per resource)
-│       ├── config/              # env, cors, logger, pagination, validated at boot
-│       ├── middleware/          # asyncHandler, errorHandler, validate
-│       ├── plugins/             # esIndexPlugin — attach a model to Elasticsearch
-│       ├── services/            # elasticsearch client
-│       ├── utils/                # ApiError, asyncRouter, pagination helper
-│       └── validators/          # Zod schemas
-├── web/                         # Angular 19 (SSR) frontend
-│   └── src/app/
-│       ├── ticket/               # feature module: listing, add/edit, own routes
-│       ├── shared/               # confirm-dialog, pagination
-│       ├── services/             # TicketService, ConfirmDialogService
-│       └── tokens/                # API_URL (browser vs SSR)
-├── docker-compose.yml            # api + web
-├── docker-compose.infra.yml      # mongo + elasticsearch
-└── README.md
-```
+**Live demo:** https://ticketmaster-web.onrender.com
+> Hosted on Render's free tier, which spins down after inactivity. The first request can take ~30s to wake back up. Subsequent requests are fast.
 
 ---
 
@@ -79,8 +33,6 @@ docker compose -f docker-compose.yml up -d --build
 | API | http://localhost:3000/api |
 | Swagger | http://localhost:3000/api-docs |
 
-> Heads up: during the `web` image build you may see a benign `ECONNREFUSED` in the log. That's Angular's SSR prerender step trying to reach the API at build time, before any container is actually running. The build still succeeds, and real API calls work fine once everything is up.
-
 To tear down, run `docker compose -f docker-compose.yml down`, then `docker compose -f docker-compose.infra.yml down` (add `-v` if you also want to wipe Mongo/ES data).
 
 ### Hybrid, for active development
@@ -101,6 +53,72 @@ npm start             # http://localhost:4200
 ```
 
 `api/.env` already ships with the `localhost` values this mode needs, so nothing to edit.
+
+---
+
+## Stack
+
+| Layer      | Tech                                                        |
+|------------|--------------------------------------------------------------|
+| Frontend   | Angular 19 (standalone components, SSR), TailwindCSS, RxJS    |
+| Backend    | Node.js, Express, TypeScript                                  |
+| Data       | MongoDB (Mongoose), Elasticsearch (search)                    |
+| Docs       | Swagger / OpenAPI                                              |
+| Infra      | Docker, Docker Compose                                         |
+
+---
+
+## Highlights
+
+- **Layered backend.** Routes wire paths to controllers, controllers orchestrate, and models own their own persistence. Validation, logging, and configuration each live in their own folder.
+- **One error handler.** Every route is wrapped so errors always land in a single handler, with a typed `ApiError` carrying the right status code. No repeated try/catch blocks.
+- **Schema-driven validation and config.** Zod checks request bodies and environment variables at startup, so bad input or missing config fails fast with a clear message.
+- **Search that stays in sync.** A reusable mongoose plugin (`plugins/esIndexPlugin`) mirrors writes into Elasticsearch and adds a `search()` static, so any model gets indexing and full-text search with no per-model glue code.
+- **Structured logging.** Leveled, traced request logs instead of console output, with third-party errors summarized into something readable.
+- **Security by default.** Standard security headers, an explicit CORS allowlist, no secrets or hardcoded paths in source.
+- **A frontend that knows where it's running.** The same Angular app resolves the API's address differently in the browser versus during server rendering, so SSR works in both environments without extra setup.
+- **CI on every push.** GitHub Actions builds and tests both the API and the frontend on every push and pull request to main.
+- **Deployed on Render.** Both services run as Docker images, `api` and `web`, each with their own build and environment configuration.
+
+---
+
+## Project structure
+
+```
+.
+├── api/                        # Express + TypeScript backend
+│   └── src/
+│       ├── app/                # routes → controllers → models (per resource)
+│       ├── config/              # env, cors, logger, pagination, validated at boot
+│       ├── middleware/          # asyncHandler, errorHandler, validate
+│       ├── plugins/             # esIndexPlugin, attach a model to Elasticsearch
+│       ├── services/            # elasticsearch client
+│       ├── utils/                # ApiError, asyncRouter, pagination helper
+│       └── validators/          # Zod schemas
+├── web/                         # Angular 19 (SSR) frontend
+│   └── src/app/
+│       ├── ticket/               # feature module: listing, add/edit, own routes
+│       ├── shared/               # confirm-dialog, pagination
+│       ├── services/             # TicketService, ConfirmDialogService
+│       ├── tokens/                # API_URL (browser vs SSR)
+│       └── app.routes.server.ts   # per-route render mode (SSR vs prerender)
+├── docker-compose.yml            # api + web
+├── docker-compose.infra.yml      # mongo + elasticsearch
+└── README.md
+```
+
+---
+
+## Deployment
+
+Live on Render as two separate services, each built from its own Dockerfile: [`api/Dockerfile`](api/Dockerfile) and [`web/Dockerfile`](web/Dockerfile).
+
+| Service | Notes |
+|---|---|
+| `api` | Needs `NODE_ENV=production` set explicitly in Render's dashboard. Render doesn't set this for you, and the logger relies on it to skip a dev-only pretty-print transport that isn't installed in the production image. |
+| `web` | `environment.prod.ts` bakes in the live `api` URL at build time. `app.routes.server.ts` renders every route per-request (`RenderMode.Server`) instead of prerendering at build time, so `ng build` never needs to reach the API. |
+
+Both services are on Render's free tier, so they spin down after inactivity. See the live demo link at the top for the cold-start note.
 
 ---
 
@@ -129,17 +147,6 @@ Swagger is generated from JSDoc comments on the route definitions themselves (`a
 **http://localhost:3000/api-docs**
 
 ---
-
-## Scripts
-
-| Where | Command | Does |
-|---|---|---|
-| `api/` | `npm run dev` | Runs the API with hot reload (`ts-node-dev`, transpile-only) |
-| `api/` | `npm run build` | Compiles TypeScript to `dist/` |
-| `api/` | `npm start` | Runs the compiled build |
-| `web/` | `npm start` | `ng serve`, dev server on :4200 |
-| `web/` | `npm run build` | Production SSR build |
-| `web/` | `npm run serve:ssr:ticketmaster` | Runs the built SSR server |
 
 ## Screenshots
 
